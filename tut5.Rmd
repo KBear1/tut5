@@ -1,0 +1,28 @@
+---
+title: "tut5"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r warning=FALSE, message=FALSE}
+library(foreign)
+dataset = read.spss("C:\\Users\\user\\Desktop\\2015-16 sem2\\is4250\\country122.sav", to.data.frame=TRUE)
+# birthrat and lifeexpf 
+library(ggplot2)
+ggplot(dataset,aes(x=birthrat,y=lifeexpf))+geom_point()+geom_smooth(method=lm,se=FALSE) 
+fit <- lm(lifeexpf ~ birthrat, data = dataset)
+summary(fit)
+predict(fit, data.frame(birthrat=25.0))
+# multiple linear regression
+fit2 <- lm(lifeexpf ~ docs + gdp + hospbed + radio + urban, data=dataset)
+summary(fit2)
+# predicted FLE
+predictedFLE = 5.391e+01+dataset$docs*4.647e-01+dataset$gdp*1.668e-04+dataset$hospbed*8.525e-03+dataset$radio*4.025e-02+dataset$urban*1.113e-01
+dataset$predictedFLE <- predictedFLE
+library(dplyr)
+dplyr::select(dataset, lifeexpf, predictedFLE)
+```
+
